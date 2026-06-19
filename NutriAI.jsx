@@ -96,7 +96,7 @@ function NutriAI() {
 
     try {
       // Replace with your deployed Cloudflare Worker URL
-      const WORKER_URL = "https://nutriai-worker.YOUR-SUBDOMAIN.workers.dev";
+      const WORKER_URL = "https://nutriai-worker.wtbbiealtm18.workers.dev/";
 
       const resp = await fetch(WORKER_URL, {
         method: "POST",
