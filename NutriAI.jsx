@@ -1,4 +1,4 @@
-import { useState } from "react";
+const { useState } = React;
 
 const DARK = "#0D3B2E";
 const SAGE = "#52796F";
@@ -81,7 +81,7 @@ const card = {
   marginBottom: 12,
 };
 
-export default function NutriAI() {
+function NutriAI() {
   const [meal, setMeal] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -95,29 +95,13 @@ export default function NutriAI() {
     setResult(null);
 
     try {
-      const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      // Replace with your deployed Cloudflare Worker URL
+      const WORKER_URL = "https://nutriai-worker.YOUR-SUBDOMAIN.workers.dev";
+
+      const resp = await fetch(WORKER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-6",
-          max_tokens: 1000,
-          messages: [{
-            role: "user",
-            content: `You are a certified nutritionist. Analyze the nutritional content of this meal: "${mealText}"
-Return ONLY valid JSON, no markdown, no text outside the JSON object:
-{
-  "calories": <integer>,
-  "protein_g": <integer>,
-  "carbs_g": <integer>,
-  "fat_g": <integer>,
-  "fiber_g": <integer>,
-  "health_score": <integer 1-10, consider balance of macros and micronutrients>,
-  "meal_type": <"Breakfast" | "Lunch" | "Dinner" | "Snack">,
-  "highlights": [<string fact 1>, <string fact 2>, <string fact 3>],
-  "tips": [<concrete improvement tip 1>, <concrete improvement tip 2>]
-}`
-          }]
-        })
+        body: JSON.stringify({ meal: mealText })
       });
 
       const data = await resp.json();
